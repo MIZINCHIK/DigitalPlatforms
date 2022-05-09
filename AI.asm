@@ -16,18 +16,18 @@ start:
 	ldi r0, stack
 	stsp r0
 	#put some inputs for debugging
-	ldi r0, XBALL
-	ldi r1, YBALL
-	ldi r2, 0
-	ldi r3, 0
-	st r0, r2
-	st r1, r3
-	ldi r0, VX
-	ldi r1, VY
-	ldi r2, -3
-	ldi r3, -1
-	st r0, r2
-	st r1, r3
+	#ldi r0, XBALL
+	#ldi r1, YBALL
+	#ldi r2, 0
+	#ldi r3, 0
+	#st r0, r2
+	#st r1, r3
+	#ldi r0, VX
+	#ldi r1, VY
+	#ldi r2, -3
+	#ldi r3, -1
+	#st r0, r2
+	#st r1, r3
 
 main:
 	#get the VX and check if it's positive or not
@@ -194,6 +194,7 @@ compute:
 	ldi r1, 0
 	ldi r2, VY
 	ld r2, r2
+	push r2
 	if
 	tst r2
 	is mi
@@ -202,7 +203,6 @@ compute:
 	fi
 	#we will eventually come back to it's sign but a bit later
 	#so we are pushing it to the stack
-	push r2
 	ldi r3, 2
 	if
 	cmp r2, r3
@@ -257,6 +257,15 @@ compute:
 	#Okay, let's add our ball's Y coordinate to the (224 - XBALL) / VX * VY
 	ldi r2, YBALL
 	ld r2, r2
+	pop r3
+	push r3
+	#negate YBALL if VY < 0
+	if
+	tst r3
+	is mi
+		neg r2
+		inc r1
+	fi
 	ldi r3, 0
 	add r0, r2
 	#add carry to r1 -- carry counter
@@ -273,11 +282,11 @@ compute:
 	fi
 	pop r2
 	#and we negate it if we had negative VY
-	if
-	tst r2
-	is mi
-		neg r0
-	fi	
+	#if
+	#tst r2
+	#is mi
+	#	neg r0
+	#fi
 	#load the result (!!PART TO IMPROVE!!)	
 	ldi r1, YBAT
 	st r1, r0
