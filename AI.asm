@@ -211,7 +211,7 @@ compute:
 		shla r0
 		if
 		is cs
-			#counting carry
+			#counting carry in r1
 			inc r1
 		fi
 	else
@@ -257,7 +257,10 @@ compute:
 	#Okay, let's add our ball's Y coordinate to the (224 - XBALL) / VX * VY
 	ldi r2, YBALL
 	ld r2, r2
+	ldi r3, 0
 	add r0, r2
+	#add carry to r1 -- carry counter
+	addc r3, r1
 	move r2, r0
 	ldi r2, 1
 	and r1, r2
