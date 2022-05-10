@@ -30,34 +30,46 @@ start:
 	#st r1, r3
 
 main:
-	#get the VX and check if it's positive or not
-	#if it is then jump to subroutine calculating
-	#YBAT. Then jump to main again.
+	#in cycle get the VX and check if it's positive or not
+	#if it is then jump to `compute` and calculate bat position
+	#Then jump to main again
+	#if not then put the bat in the middle
 	ldi r0, VX
-	ld r0, r0
-	if
-	tst r0
-	is gt
-		jsr compute
-	fi
-	br main
+	ldi r2, YBAT
+	ldi r3, 127
+main_loop:
+	ld r0, r1
+	tst r1
+	bgt compute
+	st r2, r3
+	br main_loop
+
 
 compute:
 	#load all values in one moment
-	ldi r0, YBALL
+	ldi r3, YBALL
 	ldi r1, XBALL
 	ldi r2, VY
-	ld r0, r0
+	ld r3, r3
 	ld r1, r1
 	ld r2, r2
-	#put VY and YBALL in stack to use later
-	push r0
-	push r2
 	#computing 224-XBALL
 	ldi r0, 224
 	sub r0, r1
+	##exit if XBALL >= 224
+	## unneeded because the bat will go to the middle
+	#if
+	#is lo
+	#	rts
+	#fi
+	## or
+	# blo main
+	#put VY and YBALL in stack to use later
+	push r3
+	push r2
+	# move 224-XBALL to r0 (why?)
 	move r1, r0
-	#then I need to divide it by VX
+	#then I need to divide 224-XBALL by VX
 	ldi r1, 2
 	ldi r2, VX
 	ld r2, r2
@@ -287,6 +299,6 @@ compute:
 	#load the result (!!PART TO IMPROVE!!)	
 	ldi r1, YBAT
 	st r1, r0
-	rts
+	br main
 	
 	end
