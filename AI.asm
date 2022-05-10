@@ -279,26 +279,9 @@ compute:
 	is eq
 		neg r0
 	fi
-	ldi r2, YBAT
-	ld r2, r2
+	#load the result (!!PART TO IMPROVE!!)	
 	ldi r1, YBAT
-	if
-	cmp r2, r0
-	is lo
-		while
-		cmp r2, r0
-		stays lo
-			inc r2
-			st r1, r2
-		wend
-	else
-		while
-		cmp r2, r0
-		stays hi
-			dec r2
-			st r1, r2
-		wend
-	fi
+	st r1, r0
 	rts
 	
 	end
