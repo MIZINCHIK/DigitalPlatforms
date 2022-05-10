@@ -24,8 +24,8 @@ start:
 	#st r1, r3
 	#ldi r0, VX
 	#ldi r1, VY
-	#ldi r2, -3
-	#ldi r3, -1
+	#ldi r2, 3
+	#ldi r3, -2
 	#st r0, r2
 	#st r1, r3
 
@@ -258,7 +258,6 @@ compute:
 	ldi r2, YBALL
 	ld r2, r2
 	pop r3
-	push r3
 	#negate YBALL if VY < 0
 	if
 	tst r3
@@ -280,16 +279,26 @@ compute:
 	is eq
 		neg r0
 	fi
-	pop r2
-	#and we negate it if we had negative VY
-	#if
-	#tst r2
-	#is mi
-	#	neg r0
-	#fi
-	#load the result (!!PART TO IMPROVE!!)	
+	ldi r2, YBAT
+	ld r2, r2
 	ldi r1, YBAT
-	st r1, r0
+	if
+	cmp r2, r0
+	is lo
+		while
+		cmp r2, r0
+		stays lo
+			inc r2
+			st r1, r2
+		wend
+	else
+		while
+		cmp r2, r0
+		stays hi
+			dec r2
+			st r1, r2
+		wend
+	fi
 	rts
 	
 	end
