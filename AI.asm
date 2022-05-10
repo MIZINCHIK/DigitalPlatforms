@@ -37,17 +37,24 @@ main:
 	ld r0, r0
 	if
 	tst r0
-	is pl
+	is gt
 		jsr compute
 	fi
 	br main
 
 compute:
-	#it starts with computing 224-XBALL and
-	#pushing it into r0
-	ldi r0, 224
+	#load all values in one moment
+	ldi r0, YBALL
 	ldi r1, XBALL
+	ldi r2, VY
+	ld r0, r0
 	ld r1, r1
+	ld r2, r2
+	#put VY and YBALL in stack to use later
+	push r0
+	push r2
+	#computing 224-XBALL
+	ldi r0, 224
 	sub r0, r1
 	move r1, r0
 	#then I need to divide it by VX
@@ -140,10 +147,10 @@ compute:
 				shla r2
 				shla r2
 				#and the carry_bit is in r3
-				ldi r3, 0
+				clr r3
 				add r2, r1
 				addc r3, r3
-				ldi r2, 0
+				clr r2
 				add r1, r0
 				addc r2, r3
 				
@@ -191,9 +198,8 @@ compute:
 	fi
 	#OK, at this point we have calcualted (224 - XBALL) / VX
 	#now let's mult it by VY
-	ldi r1, 0
-	ldi r2, VY
-	ld r2, r2
+	clr r1
+	pop r2 # VY
 	push r2
 	if
 	tst r2
@@ -255,9 +261,8 @@ compute:
 		fi
 	fi
 	#Okay, let's add our ball's Y coordinate to the (224 - XBALL) / VX * VY
-	ldi r2, YBALL
-	ld r2, r2
-	pop r3
+	pop r3 # VY
+	pop r2 # YBALL
 	#negate YBALL if VY < 0
 	if
 	tst r3
@@ -265,7 +270,7 @@ compute:
 		neg r2
 		inc r1
 	fi
-	ldi r3, 0
+	clr r3
 	add r0, r2
 	#add carry to r1 -- carry counter
 	addc r3, r1
