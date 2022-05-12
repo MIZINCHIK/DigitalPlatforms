@@ -43,32 +43,26 @@ main_loop:
 
 compute:
 	#load all values in one moment
-	ldi r3, YBALL
-	ldi r1, XBALL
-	ldi r2, VY
-	ld r3, r3
-	ld r1, r1
+	ldi r0, XBALL
+	ldi r2, YBALL
+	ldi r3, VY
+	ld r0, r0
 	ld r2, r2
-	#computing 224-XBALL
-	ldi r0, 224
-	sub r0, r1
-	##exit if XBALL >= 224
-	## unneeded because the bat will go to the middle
-	#if
-	#is lo
-	#	rts
-	#fi
-	## or
-	# blo main
+	ld r3, r3
 	#put VY and YBALL in stack to use later
-	push r3
 	push r2
-	# move 224-XBALL to r0 (why?)
-	move r1, r0
-	#then I need to divide 224-XBALL by VX
-	ldi r1, 2
+	push r3
+	#XBALL is read 2 ticks after YBALL
+	#kinematic tick is 2 cdm-8 tick
+	#XBALL := XBALL + VX
 	ldi r2, VX
 	ld r2, r2
+	add r2, r0
+	#computing 224-XBALL
+	ldi r1, 224
+	sub r1, r0
+	#then I need to divide 224-XBALL by VX
+	ldi r1, 2
 	if
 	cmp r1, r2
 	is eq
