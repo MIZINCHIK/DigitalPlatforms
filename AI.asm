@@ -59,7 +59,9 @@ compute:
 	ld r2, r2
 	add r2, r0
 	#computing 224-XBALL
-	ldi r1, 224
+	ldi r1, 227
+	#it is 224+3 because for big vy 
+	#the ball travels too much
 	sub r1, r0
 	#then I need to divide 224-XBALL by VX
 	ldi r1, 2
