@@ -1,13 +1,19 @@
+#put some inputs for debugging
 	asect 0xfb
 XBALL:
+	dc 0
 	asect 0xfc
-YBALL: 
+YBALL:
+	dc 0
 	asect 0xfd	
-VX: 	
+VX:
+	dc 0
 	asect 0xfe
-VY: 	
+VY:
+	dc 0
 	asect 0xff
-YBAT: 	
+YBAT:
+	dc 0
 	asect 0xfa
 stack:	
 	asect 0x00
@@ -15,19 +21,6 @@ start:
 	#lower the stack
 	ldi r0, stack
 	stsp r0
-	#put some inputs for debugging
-	#ldi r0, XBALL
-	#ldi r1, YBALL
-	#ldi r2, 0
-	#ldi r3, 0
-	#st r0, r2
-	#st r1, r3
-	#ldi r0, VX
-	#ldi r1, VY
-	#ldi r2, 3
-	#ldi r3, -2
-	#st r0, r2
-	#st r1, r3
 
 main:
 	#in cycle get the VX and check if it's positive or not
@@ -35,13 +28,16 @@ main:
 	#Then jump to main again
 	#if not then put the bat in the middle
 	ldi r0, VX
+	ld r0, r1
+	tst r1
+	bgt compute
 	ldi r2, YBAT
 	ldi r3, 127
+	st r2, r3
 main_loop:
 	ld r0, r1
 	tst r1
 	bgt compute
-	st r2, r3
 	br main_loop
 
 
