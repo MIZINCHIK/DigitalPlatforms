@@ -62,12 +62,19 @@ compute:
 	#put VY and YBALL in stack to use later
 	push r2
 	push r3
+	ldi r2, VX
+	ld r2, r2
+	
 	#XBALL is read 2 ticks after YBALL
 	#kinematic tick is 2 cdm-8 tick
 	#XBALL := XBALL + VX
-	ldi r2, VX
-	ld r2, r2
-	add r2, r0
+	move r2, r1
+	shra r1
+	shra r1
+	shra r1
+	shra r1
+	add r1, r0
+	
 	#computing 224-XBALL
 	ldi r1, 227
 	#it is 224+3 because for big vy 
