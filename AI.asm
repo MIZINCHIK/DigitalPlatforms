@@ -66,10 +66,10 @@ compute:
 	ld r2, r2
 	
 	#XBALL is read 2 ticks after YBALL
-	#kinematic tick is 2 cdm-8 tick
-	#XBALL := XBALL + VX
+	#1 kinematic tick is now 1 cdm-8 tick
+	#XBALL := XBALL + VX * 2
+	#this VX is actually (VX << 4)
 	move r2, r1
-	shra r1
 	shra r1
 	shra r1
 	shra r1
