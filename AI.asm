@@ -1,20 +1,29 @@
 #put some inputs for debugging
-	asect 0xfb
+	asect 0xf0
 XBALL:
 	dc 0
-	asect 0xfc
 YBALL:
 	dc 0
-	asect 0xfd	
 VX:
 	dc 0
-	asect 0xfe
 VY:
 	dc 0
-	asect 0xff
+	asect 0xf4
+COORDS:
+	dc 70
+REFLECT:
+	dc 3
+	asect 0xf8
 YBAT:
 	dc 0
-	asect 0xfa
+	asect 0xf9
+MUL1:
+	dc 200
+MUL2:
+	dc 5
+DIV:
+	dc 3
+	asect 0xef
 stack:	
 	asect 0x00
 start:
@@ -35,6 +44,7 @@ main:
 	ldi r3, 127
 	st r2, r3
 main_loop:
+	wait
 	ld r0, r1
 	tst r1
 	bgt compute
@@ -63,143 +73,73 @@ compute:
 	#it is 224+3 because for big vy 
 	#the ball travels too much
 	sub r1, r0
+	
+	wait
+	
+	ldi r1, MUL1
+	st r1, r0
+	
+	
+	wait
+	
 	#then I need to divide 224-XBALL by VX
-	ldi r1, 2
-	if
-	cmp r1, r2
-	is eq
-		#if VX == 2 I simply "shra" the thing
-		shra r0
-		#then I need to make it positive ofc
-		ldi r3, 127
-		and r3, r0
-	else
-		ldi r1, 4
-		if
-		cmp r1, r2
-		is eq
-			#VX == 4; the same as in the previous case I simply "shra"
-			shra r0
-			shra r0
-			#and make it positive
-			ldi r3, 63
-			and r3, r0
-		else
-			ldi r1, 3
-			if
-			cmp r1, r2
-			is eq
-				#if VX == 3; now it's more complicated
-				#imagine we have two numbers: AB & CD
-				#where A, B, C, D stand for 4 bits of data each
-				#then the result of the AB*CD will be a number EF
-				#where E, F stand for 8 bits of data each
-				#and F = B * D + (B * C) << 2 + (A * D) << 2
-				#E = carry_bit + A * C + (A * D) >> 2 + (B * C) >> 2
-				#Why are we talking about multiplication?
-				#Well, number / 3 == number * (2^8 / 3) >> 8 ==
-				#== number * 86 == E in the terms below
-				#And here I try to implement this
-				
-				#I start with simply computing A & B
-				#I already know C == 5 and D == 6
-				move r0, r1
-				ldi r2, 15
-				shra r0
-				shra r0
-				shra r0
-				shra r0
-				and r2, r0
-				and r2, r1
-				#and then I push them to the stack
-				push r0
-				push r1
-				
-				#here I compute B
-				push r0
-				push r1
-				push r1
-				push r1
-				#from here I do B * D
-				pop r0
-				shla r0
-				shla r0
-				pop r2
-				shla r2
-				add r2, r0
-				#then (B * C) << 2
-				pop r1
-				push r1
-				shla r1
-				shla r1
-				pop r2
-				add r2, r1
-				shla r1
-				shla r1
-				shla r1
-				shla r1
-				#and finally (A * D) << 2
-				pop r2
-				push r2
-				shla r2
-				shla r2
-				pop r3
-				shla r3
-				add r3, r2
-				shla r2
-				shla r2
-				shla r2
-				shla r2
-				#and the carry_bit is in r3
-				clr r3
-				add r2, r1
-				addc r3, r3
-				clr r2
-				add r1, r0
-				addc r2, r3
-				
-				pop r1
-				pop r0
-				push r1
-				push r0
-				push r0
-				shla r0
-				shla r0
-				#it's time to calculate A * C
-				pop r1
-				add r1, r0
-				pop r1
-				push r1
-				shla r1
-				shla r1
-				#then (A * D) >> 2
-				pop r2
-				shla r2
-				add r2, r1
-				shra r1
-				shra r1
-				shra r1
-				shra r1
-				#there surely won't be any carry bits
-				#thus I store it in r0
-				add r1, r0
-				#finally (B * C) >> 2
-				pop r1
-				push r1
-				shla r1
-				shla r1
-				pop r2
-				add r2, r1
-				shra r1
-				shra r1
-				shra r1
-				shra r1
-				add r1, r0
-				#and carry
-				add r3, r0
-			fi
-		fi
-	fi
+	
+	
+	
+	ldi r1, DIV
+	st r1, r2
+	
+	wait
+	
+#	ldi r1, 2
+#	if
+#	cmp r1, r2
+#	is eq
+#		#if VX == 2 I simply "shra" the thing
+#		shra r0
+#		#then I need to make it positive ofc
+#		ldi r3, 127
+#		and r3, r0
+#	else
+#		ldi r1, 4
+#		if
+#		cmp r1, r2
+#		is eq
+#			#VX == 4; the same as in the previous case I simply "shra"
+#			shra r0
+#			shra r0
+#			#and make it positive
+#			ldi r3, 63
+#			and r3, r0
+#		else
+#			ldi r1, 3
+#			if
+#			cmp r1, r2
+#			is eq
+#				#if VX == 3; now it's more complicated
+#				#imagine we have two numbers: AB & CD
+#				#where A, B, C, D stand for 4 bits of data each
+#				#then the result of the AB*CD will be a number EF
+#				#where E, F stand for 8 bits of data each
+#				#and F = B * D + (B * C) << 2 + (A * D) << 2
+#				#E = carry_bit + A * C + (A * D) >> 2 + (B * C) >> 2
+#				#Why are we talking about multiplication?
+#				#Well, number / 3 == number * (2^8 / 3) >> 8 ==
+#				#== number * 86 == E in the terms below
+#				#And here I try to implement this
+#				
+#				#I start with simply computing A & B
+#				#I already know C == 5 and D == 6
+#				
+#				#the code was removed
+#				shra r0
+#				#then I need to make it positive ofc
+#				ldi r3, 127
+#				and r3, r0
+#				
+#			fi
+#		fi
+#	fi
 	#OK, at this point we have calcualted (224 - XBALL) / VX
 	#now let's mult it by VY
 	clr r1
@@ -213,57 +153,77 @@ compute:
 	fi
 	#we will eventually come back to it's sign but a bit later
 	#so we are pushing it to the stack
-	ldi r3, 2
-	if
-	cmp r2, r3
-	is eq
-		#shla if VY == 2
-		shla r0
-		if
-		is cs
-			#counting carry in r1
-			inc r1
-		fi
-	else
-		ldi r3, 4
-		if
-		cmp r2, r3
-		is eq
-			shla r0
-			#same for 4
-			if
-			is cs
-				#counting carry
-				inc r1
-			fi
-			shla r0
-			if
-			is cs
-				#counting carry
-				inc r1
-			fi
-		else
-			ldi r3, 3
-			if
-			cmp r2, r3
-			is eq
-				move r0, r2
-				shla r0
-				if
-				is cs
-					#counting carry
-					inc r1
-				fi
-				add r0, r2
-				if
-				is cs
-					#counting carry
-					inc r1
-				fi
-				move r2, r0
-			fi
-		fi
-	fi
+	
+	wait
+	
+	ldi r3, MUL2
+	st r3, r2
+	
+	wait
+	
+#	ldi r3, 2
+#	if
+#	cmp r2, r3
+#	is eq
+#		#shla if VY == 2
+#		shla r0
+#		if
+#		is cs
+#			#counting carry in r1
+#			inc r1
+#		fi
+#	else
+#		ldi r3, 4
+#		if
+#		cmp r2, r3
+#		is eq
+#			shla r0
+#			#same for 4
+#			if
+#			is cs
+#				#counting carry
+#				inc r1
+#			fi
+#			shla r0
+#			if
+#			is cs
+#				#counting carry
+#				inc r1
+#			fi
+#		else
+#			ldi r3, 3
+#			if
+#			cmp r2, r3
+#			is eq
+#				move r0, r2
+#				shla r0
+#				if
+#				is cs
+#					#counting carry
+#					inc r1
+#				fi
+#				add r0, r2
+#				if
+#				is cs
+#					#counting carry
+#					inc r1
+#				fi
+#				move r2, r0
+#			fi
+#		fi
+#	fi
+
+	
+	
+	ldi r3, COORDS
+	ld r3, r0
+	inc r3
+	ld r3, r1
+	
+	wait
+	
+
+
 	#Okay, let's add our ball's Y coordinate to the (224 - XBALL) / VX * VY
 	pop r3 # VY
 	pop r2 # YBALL
@@ -289,8 +249,11 @@ compute:
 		neg r0
 	fi
 	#load the result (!!PART TO IMPROVE!!)	
+
+	wait
 	ldi r1, YBAT
 	st r1, r0
+	wait
 	br main
 	
 	end
