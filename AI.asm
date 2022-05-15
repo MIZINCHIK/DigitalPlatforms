@@ -68,8 +68,11 @@ compute:
 	#XBALL is read 2 ticks after YBALL
 	#1 kinematic tick is now 1 cdm-8 tick
 	#XBALL := XBALL + VX * 2
-	#this VX is actually (VX << 4)
+	#this VX is actually (VX << 7)
 	move r2, r1
+	shra r1
+	shra r1
+	shra r1
 	shra r1
 	shra r1
 	shra r1
