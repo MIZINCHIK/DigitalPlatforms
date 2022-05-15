@@ -775,7 +775,9 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="label" val="Mul1"/>
       <a name="labelfont" val="SansSerif plain 9"/>
     </comp>
-    <comp lib="5" loc="(1080,250)" name="Joystick"/>
+    <comp lib="5" loc="(1080,250)" name="Joystick">
+      <a name="bits" val="3"/>
+    </comp>
     <comp loc="(1340,400)" name="VideoChip"/>
     <comp lib="0" loc="(1420,450)" name="Tunnel">
       <a name="width" val="5"/>
@@ -2275,8 +2277,8 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="radix" val="10signed"/>
     </comp>
     <comp lib="0" loc="(120,110)" name="Constant">
-      <a name="width" val="4"/>
-      <a name="value" val="0x8"/>
+      <a name="width" val="3"/>
+      <a name="value" val="0x4"/>
     </comp>
     <comp lib="0" loc="(70,30)" name="Pin">
       <a name="tristate" val="false"/>
@@ -2360,7 +2362,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="labelfont" val="SansSerif plain 9"/>
     </comp>
     <comp lib="0" loc="(100,90)" name="Pin">
-      <a name="width" val="4"/>
+      <a name="width" val="3"/>
       <a name="tristate" val="false"/>
       <a name="label" val="leftVYin"/>
     </comp>
@@ -2417,7 +2419,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="labelfont" val="SansSerif plain 9"/>
     </comp>
     <comp lib="3" loc="(200,100)" name="Negator">
-      <a name="width" val="4"/>
+      <a name="width" val="3"/>
     </comp>
     <comp lib="0" loc="(1300,630)" name="Pin">
       <a name="facing" val="west"/>
@@ -2605,7 +2607,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="labelfont" val="SansSerif plain 9"/>
     </comp>
     <comp lib="0" loc="(240,100)" name="Bit Extender">
-      <a name="in_width" val="4"/>
+      <a name="in_width" val="3"/>
       <a name="out_width" val="5"/>
       <a name="type" val="sign"/>
     </comp>
@@ -3384,7 +3386,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="labelfont" val="SansSerif plain 9"/>
     </comp>
     <comp lib="3" loc="(160,100)" name="Adder">
-      <a name="width" val="4"/>
+      <a name="width" val="3"/>
     </comp>
     <comp lib="0" loc="(1040,1360)" name="Probe">
       <a name="facing" val="west"/>
