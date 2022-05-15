@@ -81,7 +81,7 @@ compute:
 	
 	#computing XRIGHT-XBALL
 	#it is the distance to the right bat from the current position
-	ldi r1, 227
+	ldi r1, 223
 	sub r1, r0
 	
 	wait
