@@ -132,7 +132,7 @@ compute:
 	ld r3, r1 # the number of reflections from the upper and lower wall
 	wait
 
-	#Okay, let's add our ball's Y coordinate to the (224 - XRIGHT) / VX * VY
+	#Okay, let's add our ball's Y coordinate to the (XRIGHT-XBALL) / VX * VY
 	pop r3 # VY
 	pop r2 # YBALL
 	#negate YBALL if VY < 0
